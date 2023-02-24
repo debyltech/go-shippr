@@ -3,10 +3,23 @@ package xps
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	helper "github.com/debyltech/go-helpers"
 )
+
+type QuoteSurcharge struct {
+	Description string `json:"description"`
+	Amount      string `json:"amount"`
+}
+
+type QuoteResponse struct {
+	Currency        string           `json:"currency"`
+	CustomsCurrency string           `json:"customsCurrency"`
+	TotalAmount     string           `json:"totalAmount"`
+	BaseAmount      string           `json:"baseAmount"`
+	Surcharges      []QuoteSurcharge `json:"surcharges"`
+	Zone            string           `json:"zone"`
+}
 
 type QuoteAddressSender struct {
 	Country string `json:"country"`
@@ -20,66 +33,40 @@ type QuoteAddressReceiver struct {
 	Email   string `json:"email"`
 }
 
-type QuoteBillingParty string
-
-type QuoteBilling struct {
-	Party QuoteBillingParty `json:"party"`
-}
-
-type QuoteRequest struct {
-	CarrierCode         string               `json:"carrierCode"`
-	ServiceCode         string               `json:"serviceCode"`
-	PackageTypeCode     string               `json:"packageTypeCode"`
-	Sender              QuoteAddressSender   `json:"sender"`
-	Receiver            QuoteAddressReceiver `json:"receiver"`
-	Residential         bool                 `json:"residential"`
-	SignatureOptionCode *string              `json:"signatureOptionCode"`
-	ContentDescription  string               `json:"contentDescription"`
-	WeightUnit          string               `json:"weightUnit"`
-	DimensionUnit       string               `json:"dimUnit"`
-	Currency            Currency             `json:"currency"`
-	CustomsCurrency     Currency             `json:"customsCurrency"`
-	Pieces              []Piece              `json:"pieces"`
-	Billing             QuoteBilling         `json:"billing"`
-}
-
-type QuoteOption struct {
+type QuotingOption struct {
 	Name            string `json:"name"`
 	CarrierCode     string `json:"carrierCode"`
 	ServiceCode     string `json:"serviceCode"`
 	PackageTypeCode string `json:"packageTypeCode"`
 }
 
-type QuoteOptions struct {
-	Options []QuoteOption `json:"integratedQuotingOptions"`
+type QuotingOptions struct {
+	Options []QuotingOption `json:"integratedQuotingOptions"`
 }
 
 const (
-	QuoteBillingPartySender   QuoteBillingParty = "sender"
-	QuoteBillingPartyReceiver QuoteBillingParty = "receiver"
-	QuoteURIFmt               string            = "/restapi/v1/customers/%s/quote"
-	QuotingOptionsURIFmt      string            = "/restapi/v1/customers/%s/integratedQuotingOptions"
-
+	QuoteURIFmt              string = "/restapi/v1/customers/%s/quote"
+	QuotingOptionsURIFmt     string = "/restapi/v1/customers/%s/integratedQuotingOptions"
 	QuotingOptionNotFoundFmt string = "quoting option not found for carrierCode:'%s', serviceCode:'%s', packageTypeCode:'%s'"
 )
 
-func (c *Client) GetBillingEndpoint() string {
-	return BaseURI + fmt.Sprintf(QuoteURIFmt, c.CustomerId)
+func (c *Client) getBillingEndpoint() string {
+	return BaseUri + fmt.Sprintf(QuoteURIFmt, c.CustomerId)
 }
 
-func (c *Client) GetQuotingOptionsEndpoint() string {
-	return BaseURI + fmt.Sprintf(QuotingOptionsURIFmt, c.CustomerId)
+func (c *Client) getQuotingOptionsEndpoint() string {
+	return BaseUri + fmt.Sprintf(QuotingOptionsURIFmt, c.CustomerId)
 }
 
-func (c *Client) GetQuotingOptions() (*QuoteOptions, error) {
-	response, err := helper.Get(c.GetQuotingOptionsEndpoint(), BasicAuth, c.ApiKey, nil)
+func (c *Client) GetQuotingOptions() (*QuotingOptions, error) {
+	response, err := helper.Get(c.getQuotingOptionsEndpoint(), BasicAuth, c.ApiKey, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	defer response.Body.Close()
 
-	var options QuoteOptions
+	var options QuotingOptions
 	err = json.NewDecoder(response.Body).Decode(&options)
 	if err != nil {
 		return nil, err
@@ -88,7 +75,7 @@ func (c *Client) GetQuotingOptions() (*QuoteOptions, error) {
 	return &options, nil
 }
 
-func (c *Client) HasQuotingOption(request QuoteRequest) error {
+func (c *Client) HasQuotingOption(request ShipmentRequest) error {
 	options, err := c.GetQuotingOptions()
 	if err != nil {
 		return err
@@ -103,16 +90,29 @@ func (c *Client) HasQuotingOption(request QuoteRequest) error {
 	return fmt.Errorf(QuotingOptionNotFoundFmt, request.CarrierCode, request.ServiceCode, request.PackageTypeCode)
 }
 
-func (c *Client) GetQuote(request QuoteRequest) (*http.Response, error) {
+func (c *Client) GetQuote(request ShipmentRequest) (*QuoteResponse, error) {
 	err := c.HasQuotingOption(request)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := helper.Post(c.GetBillingEndpoint(), BasicAuth, c.ApiKey, request)
+	response, err := helper.Post(c.getBillingEndpoint(), BasicAuth, c.ApiKey, request)
 	if err != nil {
 		return nil, err
 	}
 
-	return response, nil
+	defer response.Body.Close()
+
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	var quote QuoteResponse
+	err = json.NewDecoder(response.Body).Decode(&quote)
+	if err != nil {
+		return nil, err
+	}
+
+	return &quote, nil
 }

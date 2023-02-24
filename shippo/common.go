@@ -1,8 +1,11 @@
-package xps
+package shippo
 
-// REDO THIS
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
 
-/*
 type Address struct {
 	Name       string `json:"name"`
 	Company    string `json:"company"`
@@ -12,6 +15,8 @@ type Address struct {
 	State      string `json:"state"`
 	PostalCode string `json:"zip"`
 	Country    string `json:"country"`
+	Email      string `json:"email,omitempty"`
+	Phone      string `json:"phone,omitempty"`
 }
 
 type Parcel struct {
@@ -20,7 +25,7 @@ type Parcel struct {
 	Height       string `json:"height"`
 	DistanceUnit string `json:"distance_unit"`
 	Weight       string `json:"weight"`
-	MassUnit     string `json:"mass_unit"`
+	WeightUnit   string `json:"mass_unit"`
 }
 
 const (
@@ -40,4 +45,3 @@ func HandleResponseStatus(res *http.Response) error {
 
 	return fmt.Errorf("status: %s error: %s", res.Status, string(bodyBytes))
 }
-*/

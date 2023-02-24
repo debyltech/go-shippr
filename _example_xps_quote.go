@@ -1,8 +1,8 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
-	"io"
 	"log"
 
 	"github.com/debyltech/go-shippr/xps"
@@ -30,7 +30,7 @@ func main() {
 		InsuranceAmount: "0",
 	}}
 
-	quoteRequest := xps.QuoteRequest{
+	quoteRequest := xps.ShipmentRequest{
 		CarrierCode:     "usps",
 		ServiceCode:     "usps_priority",
 		PackageTypeCode: "usps_custom_package",
@@ -50,8 +50,8 @@ func main() {
 		Currency:        xps.CurrencyUSD,
 		CustomsCurrency: xps.CurrencyUSD,
 		Pieces:          pieces,
-		Billing: xps.QuoteBilling{
-			Party: xps.QuoteBillingPartySender,
+		Billing: xps.ShipmentBillingQuote{
+			Party: xps.ShipmentBillingPartySender,
 		},
 	}
 
@@ -59,14 +59,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if response.Status != "200 OK" {
-		log.Printf("bad response status %s", response.Status)
-	}
-	defer response.Body.Close()
-
-	bodyBytes, err := io.ReadAll(response.Body)
+	jsonPretty, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("%+v", string(bodyBytes))
+
+	log.Print(string(jsonPretty))
 }
