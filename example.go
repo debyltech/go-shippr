@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/debyltech/go-postr/xps"
+	"github.com/debyltech/go-shippr/xps"
 )
 
 func main() {

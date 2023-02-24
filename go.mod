@@ -1,4 +1,4 @@
-module github.com/debyltech/go-postr
+module github.com/debyltech/go-shippr
 
 go 1.20
 
