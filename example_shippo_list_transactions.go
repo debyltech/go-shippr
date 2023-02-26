@@ -18,7 +18,7 @@ func main() {
 
 	client := shippo.NewClient(*apiKey)
 
-	response, err := client.ListShipments()
+	response, err := client.ListTransactions()
 	if err != nil {
 		log.Fatal(err)
 	}

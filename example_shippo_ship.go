@@ -18,7 +18,7 @@ func main() {
 
 	client := shippo.NewClient(*apiKey)
 
-	request := shippo.CreateShipmentRequest{
+	request := shippo.CreateTransactionRequest{
 		CarrierAccount:    "fa27e44374774bdea1819f4325f1347a",
 		ServiceLevelToken: "usps_priority",
 		Shipment: shippo.Shipment{
@@ -48,7 +48,7 @@ func main() {
 			}},
 		}}
 
-	response, err := client.CreateShipment(request)
+	response, err := client.CreateTransaction(request)
 	if err != nil {
 		log.Fatal(err)
 	}

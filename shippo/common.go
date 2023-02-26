@@ -19,17 +19,6 @@ type Address struct {
 	Phone      string `json:"phone,omitempty"`
 }
 
-type Parcel struct {
-	Id           string `json:"object_id,omitempty"`
-	Length       string `json:"length"`
-	Width        string `json:"width"`
-	Height       string `json:"height"`
-	DistanceUnit string `json:"distance_unit"`
-	Weight       string `json:"weight"`
-	WeightUnit   string `json:"mass_unit"`
-	LineItems    []any  `json:"line_items,omitempty"`
-}
-
 const (
 	BaseUri   string = "https://api.goshippo.com"
 	BasicAuth string = "ShippoToken"

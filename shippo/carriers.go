@@ -3,7 +3,7 @@ package shippo
 import (
 	"encoding/json"
 
-	helper "github.com/debyltech/go-helpers"
+	helper "github.com/debyltech/go-helpers/json"
 )
 
 type ServiceLevel struct {
