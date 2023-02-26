@@ -79,7 +79,7 @@ func (c *Client) CreateShipment(req CreateShipmentRequest) (*CreateShipmentRespo
 }
 
 func (c *Client) ListShipments() (*TransactionsResponse, error) {
-	response, err := helper.Get(TransactionUri, BasicAuth, c.ApiKey, map[string]string{"status": "SUCCESS"})
+	response, err := helper.Get(TransactionUri, BasicAuth, c.ApiKey, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,6 +91,27 @@ func (c *Client) ListShipments() (*TransactionsResponse, error) {
 	defer response.Body.Close()
 
 	var res TransactionsResponse
+	err = json.NewDecoder(response.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+func (c *Client) GetShipment(id string) (*TransactionResponse, error) {
+	response, err := helper.Get(TransactionUri+"/"+id, BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var res TransactionResponse
 	err = json.NewDecoder(response.Body).Decode(&res)
 	if err != nil {
 		return nil, err
