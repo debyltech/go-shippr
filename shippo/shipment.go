@@ -35,7 +35,7 @@ type ShipmentResponse struct {
 }
 
 type ShipmentsResponse struct {
-	Shipments []ShipmentResponse `json:"results"`
+	Shipments []Shipment `json:"results"`
 }
 
 var (
