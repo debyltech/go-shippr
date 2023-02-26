@@ -41,8 +41,8 @@ var (
 	GenerateRateUri string = BaseUri + "/live-rates"
 )
 
-func (c *Client) GenerateRates(req RateRequest) (*RateResponse, error) {
-	response, err := helper.Post(GenerateRateUri, BasicAuth, c.ApiKey, req)
+func (c *Client) GenerateRates(request RateRequest) (*RateResponse, error) {
+	response, err := helper.Post(GenerateRateUri, BasicAuth, c.ApiKey, request)
 	if err != nil {
 		return nil, err
 	}
@@ -53,11 +53,11 @@ func (c *Client) GenerateRates(req RateRequest) (*RateResponse, error) {
 
 	defer response.Body.Close()
 
-	var res RateResponse
-	err = json.NewDecoder(response.Body).Decode(&res)
+	var rate RateResponse
+	err = json.NewDecoder(response.Body).Decode(&rate)
 	if err != nil {
 		return nil, err
 	}
 
-	return &res, nil
+	return &rate, nil
 }

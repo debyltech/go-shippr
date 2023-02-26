@@ -28,16 +28,16 @@ const (
 	BasicAuth string = "ShippoToken"
 )
 
-func HandleResponseStatus(res *http.Response) error {
-	if res.Status == "200 OK" {
+func HandleResponseStatus(response *http.Response) error {
+	if response.Status == "200 OK" {
 		return nil
 	}
 
-	bodyBytes, err := io.ReadAll(res.Body)
+	bodyBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return err
 	}
 
-	return fmt.Errorf("status: %s error: %s", res.Status, string(bodyBytes))
+	return fmt.Errorf("status: %s error: %s", response.Status, string(bodyBytes))
 }
 */

@@ -20,12 +20,14 @@ type Address struct {
 }
 
 type Parcel struct {
+	Id           string `json:"object_id,omitempty"`
 	Length       string `json:"length"`
 	Width        string `json:"width"`
 	Height       string `json:"height"`
 	DistanceUnit string `json:"distance_unit"`
 	Weight       string `json:"weight"`
 	WeightUnit   string `json:"mass_unit"`
+	LineItems    []any  `json:"line_items,omitempty"`
 }
 
 const (
@@ -33,15 +35,15 @@ const (
 	BasicAuth string = "ShippoToken"
 )
 
-func HandleResponseStatus(res *http.Response) error {
-	if res.StatusCode >= 200 && res.StatusCode < 300 {
+func HandleResponseStatus(response *http.Response) error {
+	if response.StatusCode >= 200 && response.StatusCode < 300 {
 		return nil
 	}
 
-	bodyBytes, err := io.ReadAll(res.Body)
+	bodyBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		return err
 	}
 
-	return fmt.Errorf("status: %s error: %s", res.Status, string(bodyBytes))
+	return fmt.Errorf("status: %s error: %s", response.Status, string(bodyBytes))
 }

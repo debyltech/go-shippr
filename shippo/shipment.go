@@ -17,6 +17,7 @@ type CreateShipmentRequest struct {
 	CarrierAccount    string   `json:"carrier_account"`
 	ServiceLevelToken string   `json:"servicelevel_token"`
 	Shipment          Shipment `json:"shipment"`
+	LabelFileType     string   `json:"label_file_type,omitempty"`
 	Metadata          string   `json:"metadata,omitempty"`
 }
 
@@ -45,6 +46,7 @@ type TransactionResponse struct {
 	TrackingNumber string    `json:"tracking_number"`
 	TrackingUrl    string    `json:"tracking_url_provider"`
 	LabelUrl       string    `json:"label_url"`
+	Parcel         string    `json:"parcel"`
 	Metadata       string    `json:"metadata,omitempty"`
 }
 
@@ -55,10 +57,11 @@ type TransactionsResponse struct {
 var (
 	TransactionUri string = BaseUri + "/transactions"
 	ShipmentsUri   string = BaseUri + "/shipments"
+	ParcelsUri     string = BaseUri + "/parcels"
 )
 
-func (c *Client) CreateShipment(req CreateShipmentRequest) (*CreateShipmentResponse, error) {
-	response, err := helper.Post(TransactionUri, BasicAuth, c.ApiKey, req)
+func (c *Client) GetParcel(id string) (*Parcel, error) {
+	response, err := helper.Get(ParcelsUri+"/"+id, BasicAuth, c.ApiKey, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -69,13 +72,38 @@ func (c *Client) CreateShipment(req CreateShipmentRequest) (*CreateShipmentRespo
 
 	defer response.Body.Close()
 
-	var res CreateShipmentResponse
-	err = json.NewDecoder(response.Body).Decode(&res)
+	var parcel Parcel
+	err = json.NewDecoder(response.Body).Decode(&parcel)
 	if err != nil {
 		return nil, err
 	}
 
-	return &res, nil
+	return &parcel, nil
+}
+
+func (c *Client) CreateShipment(request CreateShipmentRequest) (*CreateShipmentResponse, error) {
+	if request.LabelFileType == "" {
+		request.LabelFileType = "PNG"
+	}
+
+	response, err := helper.Post(TransactionUri, BasicAuth, c.ApiKey, request)
+	if err != nil {
+		return nil, err
+	}
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var shipment CreateShipmentResponse
+	err = json.NewDecoder(response.Body).Decode(&shipment)
+	if err != nil {
+		return nil, err
+	}
+
+	return &shipment, nil
 }
 
 func (c *Client) ListShipments() (*TransactionsResponse, error) {
@@ -90,13 +118,13 @@ func (c *Client) ListShipments() (*TransactionsResponse, error) {
 
 	defer response.Body.Close()
 
-	var res TransactionsResponse
-	err = json.NewDecoder(response.Body).Decode(&res)
+	var transactions TransactionsResponse
+	err = json.NewDecoder(response.Body).Decode(&transactions)
 	if err != nil {
 		return nil, err
 	}
 
-	return &res, nil
+	return &transactions, nil
 }
 
 func (c *Client) GetShipment(id string) (*TransactionResponse, error) {
@@ -111,11 +139,11 @@ func (c *Client) GetShipment(id string) (*TransactionResponse, error) {
 
 	defer response.Body.Close()
 
-	var res TransactionResponse
-	err = json.NewDecoder(response.Body).Decode(&res)
+	var transaction TransactionResponse
+	err = json.NewDecoder(response.Body).Decode(&transaction)
 	if err != nil {
 		return nil, err
 	}
 
-	return &res, nil
+	return &transaction, nil
 }
