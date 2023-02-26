@@ -34,12 +34,17 @@ type ShipmentResponse struct {
 	LabelUrl       string       `json:"label_url"`
 }
 
+type ShipmentsResponse struct {
+	Shipments []ShipmentResponse `json:"results"`
+}
+
 var (
-	ShipmentUri string = BaseUri + "/transactions"
+	TransactionUri string = BaseUri + "/transactions"
+	ShipmentsUri   string = BaseUri + "/shipments"
 )
 
 func (c *Client) CreateShipment(req ShipmentRequest) (*ShipmentResponse, error) {
-	response, err := helper.Post(ShipmentUri, BasicAuth, c.ApiKey, req)
+	response, err := helper.Post(TransactionUri, BasicAuth, c.ApiKey, req)
 	if err != nil {
 		return nil, err
 	}
@@ -51,6 +56,27 @@ func (c *Client) CreateShipment(req ShipmentRequest) (*ShipmentResponse, error) 
 	defer response.Body.Close()
 
 	var res ShipmentResponse
+	err = json.NewDecoder(response.Body).Decode(&res)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+func (c *Client) ListShipments() (*ShipmentsResponse, error) {
+	response, err := helper.Get(ShipmentsUri, BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var res ShipmentsResponse
 	err = json.NewDecoder(response.Body).Decode(&res)
 	if err != nil {
 		return nil, err
