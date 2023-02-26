@@ -26,7 +26,7 @@ type ShipmentRate struct {
 	Provider      string `json:"provider"`
 }
 
-type ShipmentResponse struct {
+type TransactionResponse struct {
 	Status         string       `json:"status"`
 	Rate           ShipmentRate `json:"rate"`
 	TrackingNumber string       `json:"tracking_number"`
@@ -34,8 +34,8 @@ type ShipmentResponse struct {
 	LabelUrl       string       `json:"label_url"`
 }
 
-type ShipmentsResponse struct {
-	Shipments []Shipment `json:"results"`
+type TransactionsResponse struct {
+	Transactions []TransactionResponse `json:"results"`
 }
 
 var (
@@ -43,7 +43,7 @@ var (
 	ShipmentsUri   string = BaseUri + "/shipments"
 )
 
-func (c *Client) CreateShipment(req ShipmentRequest) (*ShipmentResponse, error) {
+func (c *Client) CreateShipment(req ShipmentRequest) (*TransactionResponse, error) {
 	response, err := helper.Post(TransactionUri, BasicAuth, c.ApiKey, req)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (c *Client) CreateShipment(req ShipmentRequest) (*ShipmentResponse, error) 
 
 	defer response.Body.Close()
 
-	var res ShipmentResponse
+	var res TransactionResponse
 	err = json.NewDecoder(response.Body).Decode(&res)
 	if err != nil {
 		return nil, err
@@ -64,8 +64,8 @@ func (c *Client) CreateShipment(req ShipmentRequest) (*ShipmentResponse, error) 
 	return &res, nil
 }
 
-func (c *Client) ListShipments() (*ShipmentsResponse, error) {
-	response, err := helper.Get(ShipmentsUri, BasicAuth, c.ApiKey, nil)
+func (c *Client) ListShipments() (*TransactionsResponse, error) {
+	response, err := helper.Get(TransactionUri, BasicAuth, c.ApiKey, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *Client) ListShipments() (*ShipmentsResponse, error) {
 
 	defer response.Body.Close()
 
-	var res ShipmentsResponse
+	var res TransactionsResponse
 	err = json.NewDecoder(response.Body).Decode(&res)
 	if err != nil {
 		return nil, err
