@@ -2,6 +2,7 @@ package shippo
 
 import (
 	"encoding/json"
+	"time"
 
 	helper "github.com/debyltech/go-helpers"
 )
@@ -36,13 +37,15 @@ type CreateShipmentResponse struct {
 }
 
 type TransactionResponse struct {
-	Id             string `json:"object_id"`
-	State          string `json:"object_state"`
-	Status         string `json:"status"`
-	TrackingNumber string `json:"tracking_number"`
-	TrackingUrl    string `json:"tracking_url_provider"`
-	LabelUrl       string `json:"label_url"`
-	Metadata       string `json:"metadata,omitempty"`
+	Id             string    `json:"object_id"`
+	Created        time.Time `json:"object_created,omitempty"`
+	Eta            time.Time `json:"eta,omitempty"`
+	State          string    `json:"object_state"`
+	Status         string    `json:"status"`
+	TrackingNumber string    `json:"tracking_number"`
+	TrackingUrl    string    `json:"tracking_url_provider"`
+	LabelUrl       string    `json:"label_url"`
+	Metadata       string    `json:"metadata,omitempty"`
 }
 
 type TransactionsResponse struct {
