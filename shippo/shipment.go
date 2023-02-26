@@ -42,6 +42,7 @@ type TransactionResponse struct {
 	TrackingNumber string `json:"tracking_number"`
 	TrackingUrl    string `json:"tracking_url_provider"`
 	LabelUrl       string `json:"label_url"`
+	Metadata       string `json:"metadata,omitempty"`
 }
 
 type TransactionsResponse struct {
