@@ -12,10 +12,11 @@ type Shipment struct {
 	Parcels     []Parcel `json:"parcels"`
 }
 
-type ShipmentRequest struct {
+type CreateShipmentRequest struct {
 	CarrierAccount    string   `json:"carrier_account"`
 	ServiceLevelToken string   `json:"servicelevel_token"`
 	Shipment          Shipment `json:"shipment"`
+	Metadata          string   `json:"metadata,omitempty"`
 }
 
 type ShipmentRate struct {
@@ -52,7 +53,7 @@ var (
 	ShipmentsUri   string = BaseUri + "/shipments"
 )
 
-func (c *Client) CreateShipment(req ShipmentRequest) (*CreateShipmentResponse, error) {
+func (c *Client) CreateShipment(req CreateShipmentRequest) (*CreateShipmentResponse, error) {
 	response, err := helper.Post(TransactionUri, BasicAuth, c.ApiKey, req)
 	if err != nil {
 		return nil, err
