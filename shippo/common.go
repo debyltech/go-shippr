@@ -34,7 +34,7 @@ const (
 )
 
 func HandleResponseStatus(res *http.Response) error {
-	if res.Status == "200 OK" {
+	if res.StatusCode >= 200 && res.StatusCode < 300 {
 		return nil
 	}
 
