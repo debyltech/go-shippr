@@ -21,7 +21,7 @@ type RateRequest struct {
 	AddressFrom Address    `json:"address_from"`
 	AddressTo   Address    `json:"address_to"`
 	LineItems   []LineItem `json:"line_items"`
-	Parcel      Parcel     `json:"parcel"`
+	Parcel      Parcel     `json:"parcel,omitempty"`
 }
 
 type RateResult struct {
