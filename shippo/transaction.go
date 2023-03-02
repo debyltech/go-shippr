@@ -26,6 +26,7 @@ type TransactionRate struct {
 }
 
 type CreateTransactionResponse struct {
+	Id             string          `json:"object_id"`
 	Status         string          `json:"status"`
 	Rate           TransactionRate `json:"rate"`
 	TrackingNumber string          `json:"tracking_number"`
