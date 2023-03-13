@@ -7,6 +7,7 @@ import (
 )
 
 type Address struct {
+	Id         string `json:"object_id,omitempty"`
 	Name       string `json:"name"`
 	Company    string `json:"company"`
 	Address1   string `json:"street1"`

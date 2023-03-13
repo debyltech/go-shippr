@@ -9,6 +9,10 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
+const (
+	TransactionUri string = BaseUri + "/transactions"
+)
+
 type CreateTransactionRequest struct {
 	CarrierAccount    string   `json:"carrier_account"`
 	ServiceLevelToken string   `json:"servicelevel_token"`
@@ -50,11 +54,6 @@ type TransactionResponse struct {
 type TransactionsResponse struct {
 	Transactions []TransactionResponse `json:"results"`
 }
-
-var (
-	TransactionUri string = BaseUri + "/transactions"
-	ParcelsUri     string = BaseUri + "/parcels"
-)
 
 func (t *TransactionResponse) TransactionPNGBase64() (string, error) {
 	img, err := qrcode.Encode("transaction:"+t.Id, qrcode.Medium, 128)

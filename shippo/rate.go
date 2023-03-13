@@ -6,6 +6,10 @@ import (
 	helper "github.com/debyltech/go-helpers/json"
 )
 
+const (
+	GenerateRateUri string = BaseUri + "/live-rates"
+)
+
 type LineItem struct {
 	Quantity           int    `json:"quantity"`
 	TotalPrice         string `json:"total_price"`
@@ -36,10 +40,6 @@ type RateResult struct {
 type RateResponse struct {
 	Rates []RateResult `json:"results"`
 }
-
-var (
-	GenerateRateUri string = BaseUri + "/live-rates"
-)
 
 func (c *Client) GenerateRates(request RateRequest) (*RateResponse, error) {
 	response, err := helper.Post(GenerateRateUri, BasicAuth, c.ApiKey, request)

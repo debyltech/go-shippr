@@ -6,6 +6,10 @@ import (
 	helper "github.com/debyltech/go-helpers/json"
 )
 
+const (
+	ParcelsUri string = BaseUri + "/parcels"
+)
+
 type Parcel struct {
 	Id           string `json:"object_id,omitempty"`
 	Length       string `json:"length"`
