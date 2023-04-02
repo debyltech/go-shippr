@@ -29,6 +29,7 @@ type RateRequest struct {
 }
 
 type RateResult struct {
+	Id            string `json:"object_id"`
 	Amount        string `json:"amount"`
 	AmountLocal   string `json:"amount_local"`
 	Currency      string `json:"currency"`

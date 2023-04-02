@@ -18,37 +18,26 @@ func main() {
 
 	client := shippo.NewClient(*apiKey)
 
-	request := shippo.CreateTransactionRequest{
-		CarrierAccount:    "fa27e44374774bdea1819f4325f1347a",
-		ServiceLevelToken: "usps_priority",
-		Shipment: shippo.Shipment{
-			AddressFrom: shippo.Address{
-				Name:       "de Byl Technologies LLC",
-				Address1:   "176 Lull Rd",
-				City:       "Weare",
-				State:      "NH",
-				Country:    "US",
-				PostalCode: "03281",
-			},
-			AddressTo: shippo.Address{
-				Name:       "Mrs Hippo",
-				Address1:   "965 Mission St.",
-				City:       "San Francisco",
-				State:      "CA",
-				Country:    "US",
-				PostalCode: "94105",
-			},
-			Parcels: []shippo.Parcel{{
-				Length:       "12",
-				Width:        "12",
-				Height:       "10",
-				DistanceUnit: "cm",
-				Weight:       "150",
-				WeightUnit:   "g",
-			}},
-		}}
+	request := shippo.Shipment{
+		AddressTo: shippo.Address{
+			Name:       "Mrs Hippo",
+			Address1:   "965 Mission St.",
+			City:       "San Francisco",
+			State:      "CA",
+			Country:    "US",
+			PostalCode: "94105",
+		},
+		Parcels: []shippo.Parcel{{
+			Length:       "12",
+			Width:        "12",
+			Height:       "10",
+			DistanceUnit: "cm",
+			Weight:       "150",
+			WeightUnit:   "g",
+		}},
+	}
 
-	response, err := client.CreateTransaction(request)
+	response, err := client.CreateShipment(request)
 	if err != nil {
 		log.Fatal(err)
 	}
