@@ -6,20 +6,20 @@ import (
 	helper "github.com/debyltech/go-helpers/json"
 )
 
-type ServiceLevel struct {
+type CarrierServiceLevel struct {
 	Token               string `json:"token"`
 	Name                string `json:"name"`
 	SupportReturnLabels bool   `json:"supports_return_labels"`
 }
 
 type Account struct {
-	CarrierId     string            `json:"object_id"`
-	Carrier       string            `json:"carrier"`
-	CarrierName   string            `json:"carrier_name"`
-	ServiceLevels []ServiceLevel    `json:"service_levels"`
-	AccountId     string            `json:"account_id"`
-	Parameters    map[string]string `json:"parameters"`
-	Active        bool              `json:"active"`
+	CarrierId     string                `json:"object_id"`
+	Carrier       string                `json:"carrier"`
+	CarrierName   string                `json:"carrier_name"`
+	ServiceLevels []CarrierServiceLevel `json:"service_levels"`
+	AccountId     string                `json:"account_id"`
+	Parameters    map[string]string     `json:"parameters"`
+	Active        bool                  `json:"active"`
 }
 
 type CarrierResponse struct {

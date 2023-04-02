@@ -20,6 +20,25 @@ type Address struct {
 	Phone      string `json:"phone,omitempty"`
 }
 
+type LineItem struct {
+	Quantity           int    `json:"quantity"`
+	TotalPrice         string `json:"total_price"`
+	Currency           string `json:"currency"`
+	Weight             string `json:"weight"`
+	WeightUnit         string `json:"weight_unit"`
+	Title              string `json:"title"`
+	ManufactureCountry string `json:"manufacture_country"`
+	Sku                string `json:"sku"`
+}
+
+type ServiceLevel struct {
+	Name               string `json:"name"`
+	Token              string `json:"token"`
+	Terms              string `json:"terms"`
+	ExtendedToken      string `json:"extended_token"`
+	ParentServiceLevel string `json:"parent_servicelevel,omitempty"`
+}
+
 const (
 	BaseUri   string = "https://api.goshippo.com"
 	BasicAuth string = "ShippoToken"

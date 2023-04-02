@@ -3,6 +3,7 @@ package shippo
 import (
 	"encoding/base64"
 	"encoding/json"
+	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
 	"github.com/skip2/go-qrcode"
@@ -13,11 +14,14 @@ const (
 )
 
 type Shipment struct {
-	Id          string   `json:"object_id,omitempty"`
-	AddressFrom Address  `json:"address_from"`
-	AddressTo   Address  `json:"address_to"`
-	Parcels     []Parcel `json:"parcels"`
-	Metadata    string   `json:"metadata,omitempty"`
+	Id                 string    `json:"object_id,omitempty"`
+	Created            time.Time `json:"object_created,omitempty"`
+	AddressFrom        Address   `json:"address_from"`
+	AddressTo          Address   `json:"address_to"`
+	Parcels            []Parcel  `json:"parcels"`
+	CustomsDeclaration any       `json:"customs_declaration,omitempty"`
+	Metadata           string    `json:"metadata,omitempty"`
+	Rates              []Rate    `json:"rates,omitempty"`
 }
 
 func (s *Shipment) ShipmentPNGBase64() (string, error) {
