@@ -22,6 +22,7 @@ type Shipment struct {
 	CustomsDeclaration any       `json:"customs_declaration,omitempty"`
 	Metadata           string    `json:"metadata,omitempty"`
 	Rates              []Rate    `json:"rates,omitempty"`
+	Messages           any       `json:"messages"`
 }
 
 func (s *Shipment) ShipmentPNGBase64() (string, error) {
@@ -46,6 +47,28 @@ func (c *Client) CreateShipment(request Shipment) (*Shipment, error) {
 	defer response.Body.Close()
 
 	var shipment Shipment
+	err = json.NewDecoder(response.Body).Decode(&shipment)
+	if err != nil {
+		return nil, err
+	}
+
+	return &shipment, nil
+}
+
+func (c *Client) GetShipmentById(id string) (*Shipment, error) {
+	var shipment Shipment
+	response, err := helper.Get(ShipmentsUri+"/"+id, BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
 	err = json.NewDecoder(response.Body).Decode(&shipment)
 	if err != nil {
 		return nil, err
