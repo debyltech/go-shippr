@@ -77,3 +77,17 @@ func (c *Client) GetShipmentById(id string) (*Shipment, error) {
 
 	return &shipment, nil
 }
+
+func (c *Client) AwaitQueuedFinished(id string) error {
+	var err error
+	var shipment *Shipment = &Shipment{Status: "QUEUED"}
+
+	for shipment.Status == "QUEUED" {
+		shipment, err = c.GetShipmentById(id)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
