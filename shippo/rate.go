@@ -2,13 +2,15 @@ package shippo
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
 )
 
 const (
-	GenerateRateUri string = BaseUri + "/live-rates"
+	GenerateRateUri        string = BaseUri + "/live-rates"
+	GetRatesShipmentUriFmt string = ShipmentsUri + "/%s/rates/USD"
 )
 
 type Rate struct {
@@ -48,6 +50,10 @@ type LiveRateResponse struct {
 	Rates []LiveRateResult `json:"results"`
 }
 
+type RatesResponse struct {
+	Rates []Rate `json:"results"`
+}
+
 func (c *Client) GetLiveRates(request LiveRateRequest) (*LiveRateResponse, error) {
 	response, err := helper.Post(GenerateRateUri, BasicAuth, c.ApiKey, request)
 	if err != nil {
@@ -67,4 +73,26 @@ func (c *Client) GetLiveRates(request LiveRateRequest) (*LiveRateResponse, error
 	}
 
 	return &rate, nil
+}
+
+func (c *Client) GetRatesForShipmentId(shipmentId string) (*RatesResponse, error) {
+	response, err := helper.Get(fmt.Sprintf(GetRatesShipmentUriFmt, shipmentId), BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var rates RatesResponse
+	err = json.NewDecoder(response.Body).Decode(&rates)
+	if err != nil {
+		return nil, err
+	}
+
+	return &rates, nil
 }

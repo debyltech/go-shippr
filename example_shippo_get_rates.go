@@ -19,7 +19,7 @@ func main() {
 
 	client := shippo.NewClient(*apiKey)
 
-	response, err := client.GetShipmentById("7a5b0a8118b548a7b3e529fc58f8ac56")
+	response, err := client.GetRatesForShipmentId("5d3dbe982334420495893a530ca3b302")
 	if err != nil {
 		log.Fatal(err)
 	}
