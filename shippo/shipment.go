@@ -22,7 +22,7 @@ type Shipment struct {
 	CustomsDeclaration any       `json:"customs_declaration,omitempty"`
 	Metadata           string    `json:"metadata,omitempty"`
 	Rates              []Rate    `json:"rates,omitempty"`
-	Messages           any       `json:"messages"`
+	Messages           []any     `json:"messages"`
 }
 
 func (s *Shipment) ShipmentPNGBase64() (string, error) {
