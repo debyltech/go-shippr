@@ -51,7 +51,9 @@ type LiveRateResponse struct {
 }
 
 type RatesResponse struct {
-	Rates []Rate `json:"results"`
+	Next     any    `json:"next"`
+	Previous any    `json:"previous"`
+	Rates    []Rate `json:"results"`
 }
 
 func (c *Client) GetLiveRates(request LiveRateRequest) (*LiveRateResponse, error) {

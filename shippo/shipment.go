@@ -15,6 +15,7 @@ const (
 
 type Shipment struct {
 	Id                 string    `json:"object_id,omitempty"`
+	Status             string    `json:"status"`
 	Created            time.Time `json:"object_created,omitempty"`
 	AddressFrom        Address   `json:"address_from"`
 	AddressTo          Address   `json:"address_to"`

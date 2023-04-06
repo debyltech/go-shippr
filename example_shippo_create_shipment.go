@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/debyltech/go-shippr/shippo"
@@ -18,7 +19,7 @@ func main() {
 
 	client := shippo.NewClient(*apiKey)
 
-	request := shippo.LiveRateRequest{
+	request := shippo.Shipment{
 		AddressFrom: shippo.Address{
 			Name:       "de Byl Technologies LLC",
 			Address1:   "176 Lull Rd",
@@ -26,6 +27,7 @@ func main() {
 			State:      "NH",
 			Country:    "US",
 			PostalCode: "03281",
+			Phone:      "6037484015",
 		},
 		AddressTo: shippo.Address{
 			Name:       "Mrs Hippo",
@@ -36,27 +38,17 @@ func main() {
 			PostalCode: "03242",
 			Phone:      "6035055790",
 		},
-		LineItems: []shippo.LineItem{{
-			Quantity:           1,
-			TotalPrice:         "49.99",
-			Currency:           "USD",
-			Weight:             "150",
-			WeightUnit:         "g",
-			Title:              "Deflector",
-			ManufactureCountry: "US",
-			Sku:                "DBD123",
+		Parcels: []shippo.Parcel{{
+			Length:       "6",
+			Width:        "6",
+			Height:       "4",
+			DistanceUnit: "in",
+			Weight:       "0.5",
+			WeightUnit:   "lb",
 		}},
-		Parcel: shippo.Parcel{
-			Length:       "12",
-			Width:        "12",
-			Height:       "10",
-			DistanceUnit: "cm",
-			Weight:       "150",
-			WeightUnit:   "g",
-		},
 	}
 
-	response, err := client.GetLiveRates(request)
+	response, err := client.CreateShipment(request)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,6 +56,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(string(jsonPretty))
 
-	log.Print(string(jsonPretty))
+	rates, err := client.GetRatesForShipmentId(response.Id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	jsonPretty, err = json.MarshalIndent(rates, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(string(jsonPretty))
+	fmt.Println(response.Id)
 }
