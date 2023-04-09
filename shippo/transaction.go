@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
@@ -134,13 +136,15 @@ func (c *Client) GetTransaction(id string) (*TransactionResponse, error) {
 }
 
 func (c *Client) CreateLabelWithRateId(rateId string, labelFileType string) (*TransactionResponse, error) {
-	request, err := http.NewRequest("POST", TransactionUri, nil)
+	data := url.Values{}
+	data.Set("rate", rateId)
+	data.Set("label_file_type", labelFileType)
+	data.Set("async", "false")
+
+	request, err := http.NewRequest("POST", TransactionUri, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, err
 	}
-	request.Form.Add("rate", rateId)
-	request.Form.Add("label_file_type", labelFileType)
-	request.Form.Add("async", "false")
 
 	client := &http.Client{}
 
