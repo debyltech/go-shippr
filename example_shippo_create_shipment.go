@@ -56,7 +56,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(jsonPretty))
+	err = client.AwaitQueuedFinished(response.Id)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	rates, err := client.GetRatesForShipmentId(response.Id)
 	if err != nil {

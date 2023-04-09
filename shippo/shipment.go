@@ -26,6 +26,12 @@ type Shipment struct {
 	Messages           []any     `json:"messages"`
 }
 
+type ListShipmentsResponse struct {
+	Next      *string    `json:"next"`
+	Previous  *string    `json:"previous"`
+	Shipments []Shipment `json:"results"`
+}
+
 func (s *Shipment) ShipmentPNGBase64() (string, error) {
 	img, err := qrcode.Encode("shipment:"+s.Id, qrcode.Medium, 128)
 	if err != nil {
@@ -76,6 +82,28 @@ func (c *Client) GetShipmentById(id string) (*Shipment, error) {
 	}
 
 	return &shipment, nil
+}
+
+func (c *Client) ListShipments() (*ListShipmentsResponse, error) {
+	var shipments ListShipmentsResponse
+	response, err := helper.Get(ShipmentsUri, BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	err = json.NewDecoder(response.Body).Decode(&shipments)
+	if err != nil {
+		return nil, err
+	}
+
+	return &shipments, nil
 }
 
 func (c *Client) AwaitQueuedFinished(id string) error {
