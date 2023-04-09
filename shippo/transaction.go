@@ -1,12 +1,12 @@
 package shippo
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
@@ -141,7 +141,7 @@ func (c *Client) CreateLabelWithRateId(rateId string, labelFileType string) (*Tr
 	data.Set("label_file_type", labelFileType)
 	data.Set("async", "false")
 
-	request, err := http.NewRequest("POST", TransactionUri, strings.NewReader(data.Encode()))
+	request, err := http.NewRequest("POST", TransactionUri, bytes.NewBuffer([]byte(data.Encode())))
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +149,6 @@ func (c *Client) CreateLabelWithRateId(rateId string, labelFileType string) (*Tr
 	client := &http.Client{}
 
 	request.Header.Set("Authorization", fmt.Sprintf("%s %s", BasicAuth, c.ApiKey))
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	response, err := client.Do(request)
 	if err != nil {
