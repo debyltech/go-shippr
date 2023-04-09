@@ -3,6 +3,8 @@ package shippo
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
@@ -115,6 +117,40 @@ func (c *Client) GetTransaction(id string) (*TransactionResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var transaction TransactionResponse
+	err = json.NewDecoder(response.Body).Decode(&transaction)
+	if err != nil {
+		return nil, err
+	}
+
+	return &transaction, nil
+}
+
+func (c *Client) CreateLabelWithRateId(rateId string, labelFileType string) (*TransactionResponse, error) {
+	request, err := http.NewRequest("POST", TransactionUri, nil)
+	if err != nil {
+		return nil, err
+	}
+	request.Form.Add("rate", rateId)
+	request.Form.Add("label_file_type", labelFileType)
+	request.Form.Add("async", "false")
+
+	client := &http.Client{}
+
+	request.Header.Set("Authorization", fmt.Sprintf("%s %s", authName, authValue))
+
+	response, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+
 	err = HandleResponseStatus(response)
 	if err != nil {
 		return nil, err
