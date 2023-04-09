@@ -144,7 +144,7 @@ func (c *Client) CreateLabelWithRateId(rateId string, labelFileType string) (*Tr
 
 	client := &http.Client{}
 
-	request.Header.Set("Authorization", fmt.Sprintf("%s %s", authName, authValue))
+	request.Header.Set("Authorization", fmt.Sprintf("%s %s", BasicAuth, c.ApiKey))
 
 	response, err := client.Do(request)
 	if err != nil {
