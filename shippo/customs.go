@@ -59,7 +59,7 @@ type CustomsItem struct {
 	Quantity      int       `json:"quantity"`
 	NetWeight     string    `json:"net_weight"`
 	WeightUnit    string    `json:"mass_unit"`
-	ValueAmount   float64   `json:"value_amount"`
+	ValueAmount   string    `json:"value_amount"`
 	Currency      string    `json:"value_currency"`
 	OriginCountry string    `json:"origin_country"`
 	SKUCode       string    `json:"sku_code,oitempty"`
@@ -108,7 +108,7 @@ func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
 	data.Set("quantity", fmt.Sprintf("%d", item.Quantity))
 	data.Set("net_weight", item.NetWeight)
 	data.Set("mass_unit", item.WeightUnit)
-	data.Set("value_amount", fmt.Sprintf("%.2f", item.ValueAmount))
+	data.Set("value_amount", item.ValueAmount)
 	data.Set("value_currency", item.Currency)
 	//data.Set("tariff_number", item.TariffNumber)
 	data.Set("origin_country", strings.ToUpper(item.OriginCountry))
