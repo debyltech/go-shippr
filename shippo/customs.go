@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	helper "github.com/debyltech/go-helpers/json"
@@ -109,8 +110,8 @@ func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
 	data.Set("mass_unit", item.WeightUnit)
 	data.Set("value_amount", fmt.Sprintf("%.2f", item.ValueAmount))
 	data.Set("value_currency", item.Currency)
-	data.Set("tariff_number", item.TariffNumber)
-	data.Set("origin_country", item.OriginCountry)
+	//data.Set("tariff_number", item.TariffNumber)
+	data.Set("origin_country", strings.ToUpper(item.OriginCountry))
 	data.Set("metadata", item.Metadata)
 	data.Set("sku_code", item.SKUCode)
 
