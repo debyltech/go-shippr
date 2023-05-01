@@ -15,6 +15,7 @@ type EELPFC string
 type NonDeliveryOption string
 type ContentsType string
 type Incoterm string
+type TaxType string
 
 const (
 	CustomsItemUri        string = BaseUri + "/customs/items"
@@ -42,6 +43,12 @@ const (
 	// Customs Incoterm
 	INCO_DDU Incoterm = "DDU"
 	INCO_DDP          = "DDP"
+
+	// Tax Types
+	TAX_EIN  TaxType = "EIN"
+	TAX_VAT          = "VAT"
+	TAX_IOSS         = "IOSS"
+	TAX_ARN          = "ARN"
 )
 
 type CustomsItem struct {
@@ -60,28 +67,38 @@ type CustomsItem struct {
 	Metadata      string    `json:"metadata"`
 }
 
+type CustomsTaxId struct {
+	Number string  `json:"number"`
+	Type   TaxType `json:"type"`
+}
+
+type ExporterIdentification struct {
+	TaxId CustomsTaxId `json:"tax_id"`
+}
+
 type CustomsDeclaration struct {
-	Id                  string            `json:"object_id,omitempty"`
-	Created             time.Time         `json:"object_created,omitempty"`
-	CertifySigner       string            `json:"certify_signer"`
-	Certify             bool              `json:"certify"`
-	Items               []string          `json:"items"`
-	NonDeliveryOption   NonDeliveryOption `json:"non_delivery_option"`
-	ContentsType        ContentsType      `json:"contents_type"`
-	ContentsExplanation string            `json:"contents_explanation,omitempty"`
-	ExporterReference   string            `json:"exporter_reference,omitempty"`
-	ImporterReference   string            `json:"importer_reference,omitempty"`
-	Invoice             string            `json:"invoice,omitempty"`
-	License             string            `json:"license,omitempty"`
-	Certificate         string            `json:"certificate,omitempty"`
-	Notes               string            `json:"notes,omitempty"`
-	EELPFC              EELPFC            `json:"eel_pfc,omitempty"`
-	AESITN              string            `json:"aes_itn,omitempty"`
-	Incoterm            Incoterm          `json:"incoterm"`
-	VatCollected        bool              `json:"is_vat_collected,omitempty"`
-	B13aFilingOption    string            `json:"b13a_filing_option,omitempty"`
-	B13aNumber          string            `json:"b13a_number,omitempty"`
-	Metadata            string            `json:"metadata"`
+	Id                     string                 `json:"object_id,omitempty"`
+	Created                time.Time              `json:"object_created,omitempty"`
+	CertifySigner          string                 `json:"certify_signer"`
+	Certify                bool                   `json:"certify"`
+	Items                  []string               `json:"items"`
+	NonDeliveryOption      NonDeliveryOption      `json:"non_delivery_option"`
+	ContentsType           ContentsType           `json:"contents_type"`
+	ContentsExplanation    string                 `json:"contents_explanation,omitempty"`
+	ExporterReference      string                 `json:"exporter_reference,omitempty"`
+	ImporterReference      string                 `json:"importer_reference,omitempty"`
+	Invoice                string                 `json:"invoice,omitempty"`
+	License                string                 `json:"license,omitempty"`
+	Certificate            string                 `json:"certificate,omitempty"`
+	Notes                  string                 `json:"notes,omitempty"`
+	EELPFC                 EELPFC                 `json:"eel_pfc,omitempty"`
+	AESITN                 string                 `json:"aes_itn,omitempty"`
+	Incoterm               Incoterm               `json:"incoterm"`
+	VatCollected           bool                   `json:"is_vat_collected,omitempty"`
+	B13aFilingOption       string                 `json:"b13a_filing_option,omitempty"`
+	B13aNumber             string                 `json:"b13a_number,omitempty"`
+	ExporterIdentification ExporterIdentification `json:"export_identification"`
+	Metadata               string                 `json:"metadata"`
 }
 
 func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
