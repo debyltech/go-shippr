@@ -146,7 +146,7 @@ func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
 	return &responseItem, nil
 }
 
-func (c *Client) CreatecustomsDeclaration(request CustomsDeclaration) (*CustomsDeclaration, error) {
+func (c *Client) CreateCustomsDeclaration(request CustomsDeclaration) (*CustomsDeclaration, error) {
 	response, err := helper.Post(CustomsDeclarationUri, BasicAuth, c.ApiKey, request)
 	if err != nil {
 		return nil, err
