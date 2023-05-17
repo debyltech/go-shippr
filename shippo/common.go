@@ -10,8 +10,10 @@ type Address struct {
 	Id         string `json:"object_id,omitempty"`
 	Name       string `json:"name"`
 	Company    string `json:"company"`
+	Street     string `json:"street_no"`
 	Address1   string `json:"street1"`
-	Address2   string `json:"street_no"`
+	Address2   string `json:"street2"`
+	Address3   string `json:"street3"`
 	City       string `json:"city"`
 	State      string `json:"state"`
 	PostalCode string `json:"zip"`
