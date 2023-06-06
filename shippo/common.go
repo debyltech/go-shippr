@@ -1,9 +1,13 @@
 package shippo
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"time"
 )
 
 type Address struct {
@@ -20,6 +24,24 @@ type Address struct {
 	Country    string `json:"country"`
 	Email      string `json:"email,omitempty"`
 	Phone      string `json:"phone,omitempty"`
+}
+
+type AddressValidationResultMessage struct {
+	Source string `json:"source"`
+	Code   string `json:"code"`
+	Type   string `json:"type"`
+	Text   string `json:"text"`
+}
+
+type AddressValidationResult struct {
+	IsValid  bool                             `json:"is_valid"`
+	Messages []AddressValidationResultMessage `json:"messages"`
+}
+
+type AddressValidationResponse struct {
+	Created          time.Time               `json:"object_created"`
+	IsComplete       bool                    `json:"is_complete"`
+	ValidationResult AddressValidationResult `json:"validation_results"`
 }
 
 type LineItem struct {
@@ -42,8 +64,9 @@ type ServiceLevel struct {
 }
 
 const (
-	BaseUri   string = "https://api.goshippo.com"
-	BasicAuth string = "ShippoToken"
+	BaseUri              string = "https://api.goshippo.com"
+	BasicAuth            string = "ShippoToken"
+	AddressValidationUri string = BaseUri + "/addresses"
 )
 
 func HandleResponseStatus(response *http.Response) error {
@@ -57,4 +80,38 @@ func HandleResponseStatus(response *http.Response) error {
 	}
 
 	return fmt.Errorf("status: %s error: %s", response.Status, string(bodyBytes))
+}
+
+func (c *Client) ValidateAddress(address Address) (bool, error) {
+	data := url.Values{}
+	data.Set("name", address.Name)
+	data.Set("street1", address.Address1)
+	data.Set("city", address.City)
+	data.Set("state", address.State)
+	data.Set("zip", address.PostalCode)
+	data.Set("country", address.Country)
+	data.Set("email", address.Email)
+	data.Set("validate", "true")
+
+	request, err := http.NewRequest("POST", TransactionUri, bytes.NewBuffer([]byte(data.Encode())))
+	if err != nil {
+		return false, err
+	}
+
+	client := &http.Client{}
+
+	request.Header.Set("Authorization", fmt.Sprintf("%s %s", BasicAuth, c.ApiKey))
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	response, err := client.Do(request)
+	if err != nil {
+		return false, err
+	}
+
+	var responseValidation AddressValidationResponse
+	if err := json.NewDecoder(response.Body).Decode(&responseValidation); err != nil {
+		return false, err
+	}
+
+	return responseValidation.ValidationResult.IsValid, nil
 }
