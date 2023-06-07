@@ -93,7 +93,7 @@ func (c *Client) ValidateAddress(address Address) (bool, error) {
 	data.Set("email", address.Email)
 	data.Set("validate", "true")
 
-	request, err := http.NewRequest("POST", TransactionUri, bytes.NewBuffer([]byte(data.Encode())))
+	request, err := http.NewRequest("POST", AddressValidationUri, bytes.NewBuffer([]byte(data.Encode())))
 	if err != nil {
 		return false, err
 	}
