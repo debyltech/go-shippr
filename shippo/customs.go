@@ -110,7 +110,9 @@ func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
 	data.Set("mass_unit", item.WeightUnit)
 	data.Set("value_amount", item.ValueAmount)
 	data.Set("value_currency", item.Currency)
-	//data.Set("tariff_number", item.TariffNumber)
+	if item.TariffNumber != "" {
+		data.Set("tariff_number", item.TariffNumber)
+	}
 	data.Set("origin_country", strings.ToUpper(item.OriginCountry))
 	data.Set("metadata", item.Metadata)
 	data.Set("sku_code", item.SKUCode)

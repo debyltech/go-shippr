@@ -53,6 +53,7 @@ type TransactionResponse struct {
 	LabelUrl       string    `json:"label_url"`
 	Parcel         string    `json:"parcel"`
 	Metadata       string    `json:"metadata,omitempty"`
+	Messages       []any     `json:"messages,omitempty"`
 }
 
 type TransactionsResponse struct {
