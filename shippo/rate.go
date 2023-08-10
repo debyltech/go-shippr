@@ -115,11 +115,11 @@ func (c *Client) GetRate(rateId string) (*Rate, error) {
 
 	defer response.Body.Close()
 
-	var rates RatesResponse
-	err = json.NewDecoder(response.Body).Decode(&rates)
+	var rate Rate
+	err = json.NewDecoder(response.Body).Decode(&rate)
 	if err != nil {
 		return nil, err
 	}
 
-	return &rates, nil
+	return &rate, nil
 }
