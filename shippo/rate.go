@@ -9,8 +9,11 @@ import (
 )
 
 const (
+	RatesUri string = BaseUri + "/shipments"
+
 	GenerateRateUri        string = BaseUri + "/live-rates"
 	GetRatesShipmentUriFmt string = ShipmentsUri + "/%s/rates/USD"
+	GetRateIdUriFmt        string = RatesUri + "/%s"
 )
 
 type Rate struct {
@@ -79,6 +82,28 @@ func (c *Client) GetLiveRates(request LiveRateRequest) (*LiveRateResponse, error
 
 func (c *Client) GetRatesForShipmentId(shipmentId string) (*RatesResponse, error) {
 	response, err := helper.Get(fmt.Sprintf(GetRatesShipmentUriFmt, shipmentId), BasicAuth, c.ApiKey, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = HandleResponseStatus(response)
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+
+	var rates RatesResponse
+	err = json.NewDecoder(response.Body).Decode(&rates)
+	if err != nil {
+		return nil, err
+	}
+
+	return &rates, nil
+}
+
+func (c *Client) GetRate(rateId string) (*Rate, error) {
+	response, err := helper.Get(fmt.Sprintf(GetRateIdUriFmt, rateId), BasicAuth, c.ApiKey, nil)
 	if err != nil {
 		return nil, err
 	}
