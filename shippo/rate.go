@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	RatesUri string = BaseUri + "/shipments"
+	RatesUri string = BaseUri + "/rates"
 
 	GenerateRateUri        string = BaseUri + "/live-rates"
 	GetRatesShipmentUriFmt string = ShipmentsUri + "/%s/rates/USD"
