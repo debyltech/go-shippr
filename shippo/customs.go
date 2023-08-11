@@ -95,12 +95,12 @@ type CustomsDeclaration struct {
 	EELPFC                 EELPFC                 `json:"eel_pfc,omitempty"`
 	AESITN                 string                 `json:"aes_itn,omitempty"`
 	Incoterm               Incoterm               `json:"incoterm"`
+	TotalTax               string                 `json:"total_tax"`
 	VatCollected           bool                   `json:"is_vat_collected,omitempty"`
 	B13aFilingOption       string                 `json:"b13a_filing_option,omitempty"`
 	B13aNumber             string                 `json:"b13a_number,omitempty"`
 	ExporterIdentification ExporterIdentification `json:"export_identification"`
 	Metadata               string                 `json:"metadata"`
-	IsVatCollected         bool                   `json:"is_vat_collected"`
 }
 
 func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
