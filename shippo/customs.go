@@ -77,6 +77,14 @@ type ExporterIdentification struct {
 	TaxId CustomsTaxId `json:"tax_id"`
 }
 
+type InvoicedCharges struct {
+	TotalShipping string `json:"total_shipping"`
+	TotalTaxes    string `json:"total_taxes"`
+	TotalDuties   string `json:"total_duties"`
+	OtherFees     string `json:"other_fees"`
+	Currency      string `json:"currency"`
+}
+
 type CustomsDeclaration struct {
 	Id                     string                 `json:"object_id,omitempty"`
 	Created                time.Time              `json:"object_created,omitempty"`
@@ -89,13 +97,13 @@ type CustomsDeclaration struct {
 	ExporterReference      string                 `json:"exporter_reference,omitempty"`
 	ImporterReference      string                 `json:"importer_reference,omitempty"`
 	Invoice                string                 `json:"invoice,omitempty"`
+	InvoicedCharges        InvoicedCharges        `json:"invoiced_charges,omitempty"`
 	License                string                 `json:"license,omitempty"`
 	Certificate            string                 `json:"certificate,omitempty"`
 	Notes                  string                 `json:"notes,omitempty"`
 	EELPFC                 EELPFC                 `json:"eel_pfc,omitempty"`
 	AESITN                 string                 `json:"aes_itn,omitempty"`
 	Incoterm               Incoterm               `json:"incoterm"`
-	TotalTax               string                 `json:"total_tax"`
 	VatCollected           bool                   `json:"is_vat_collected,omitempty"`
 	B13aFilingOption       string                 `json:"b13a_filing_option,omitempty"`
 	B13aNumber             string                 `json:"b13a_number,omitempty"`
