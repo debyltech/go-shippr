@@ -100,6 +100,7 @@ type CustomsDeclaration struct {
 	B13aNumber             string                 `json:"b13a_number,omitempty"`
 	ExporterIdentification ExporterIdentification `json:"export_identification"`
 	Metadata               string                 `json:"metadata"`
+	IsVatCollected         bool                   `json:"is_vat_collected"`
 }
 
 func (c *Client) CreateCustomsItem(item CustomsItem) (*CustomsItem, error) {
