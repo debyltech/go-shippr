@@ -24,9 +24,9 @@ const (
 
 	// EEL/PFC Codes
 	EEL_NOEEI3037a EELPFC = "NOEEI_30_37_a"
-	EEL_NOEEI3037h        = "NOEEI_30_37_h"
-	EEL_NOEEI3036         = "NOEEI_30_36"
-	PFC_AESITN            = "AES_ITN"
+	EEL_NOEEI3037h EELPFC = "NOEEI_30_37_h"
+	EEL_NOEEI3036  EELPFC = "NOEEI_30_36"
+	PFC_AESITN     EELPFC = "AES_ITN"
 
 	// Non-Delivery Options
 	NONDELIV_ABANDON NonDeliveryOption = "ABANDON"
@@ -34,22 +34,22 @@ const (
 
 	// Customs Declaration Content Types
 	CONTYP_DOC      ContentsType = "DOCUMENTS"
-	CONTYP_GIFT                  = "GIFT"
-	CONTYP_SAMPLE                = "SAMPLE"
-	CONTYP_MERCH                 = "MERCHANDISE"
-	CONTYP_HUMDON                = "HUMANITARIAN_DONATION"
-	CONTYP_RETMERCH              = "RETURN_MERCHANDISE"
-	CONTYP_OTHER                 = "OTHER"
+	CONTYP_GIFT     ContentsType = "GIFT"
+	CONTYP_SAMPLE   ContentsType = "SAMPLE"
+	CONTYP_MERCH    ContentsType = "MERCHANDISE"
+	CONTYP_HUMDON   ContentsType = "HUMANITARIAN_DONATION"
+	CONTYP_RETMERCH ContentsType = "RETURN_MERCHANDISE"
+	CONTYP_OTHER    ContentsType = "OTHER"
 
 	// Customs Incoterm
 	INCO_DDU Incoterm = "DDU"
-	INCO_DDP          = "DDP"
+	INCO_DDP Incoterm = "DDP"
 
 	// Tax Types
 	TAX_EIN  TaxType = "EIN"
-	TAX_VAT          = "VAT"
-	TAX_IOSS         = "IOSS"
-	TAX_ARN          = "ARN"
+	TAX_VAT  TaxType = "VAT"
+	TAX_IOSS TaxType = "IOSS"
+	TAX_ARN  TaxType = "ARN"
 )
 
 type CustomsItem struct {
@@ -62,7 +62,7 @@ type CustomsItem struct {
 	ValueAmount   string    `json:"value_amount"`
 	Currency      string    `json:"value_currency"`
 	OriginCountry string    `json:"origin_country"`
-	SKUCode       string    `json:"sku_code,oitempty"`
+	SKUCode       string    `json:"sku_code,omitempty"`
 	ECCNEAR99     string    `json:"eccn_ear99,omitempty"`
 	TariffNumber  string    `json:"tariff_number,omitempty"`
 	Metadata      string    `json:"metadata"`
