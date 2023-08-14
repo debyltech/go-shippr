@@ -14,16 +14,16 @@ const (
 )
 
 type Shipment struct {
-	Id                 string    `json:"object_id,omitempty"`
-	Status             string    `json:"status"`
-	Created            time.Time `json:"object_created,omitempty"`
-	AddressFrom        Address   `json:"address_from"`
-	AddressTo          Address   `json:"address_to"`
-	Parcels            []Parcel  `json:"parcels"`
-	CustomsDeclaration any       `json:"customs_declaration,omitempty"`
-	Metadata           string    `json:"metadata,omitempty"`
-	Rates              []Rate    `json:"rates,omitempty"`
-	Messages           []any     `json:"messages"`
+	Id                 string             `json:"object_id,omitempty"`
+	Status             string             `json:"status"`
+	Created            time.Time          `json:"object_created,omitempty"`
+	AddressFrom        Address            `json:"address_from"`
+	AddressTo          Address            `json:"address_to"`
+	Parcels            []Parcel           `json:"parcels"`
+	CustomsDeclaration CustomsDeclaration `json:"customs_declaration,omitempty"`
+	Metadata           string             `json:"metadata,omitempty"`
+	Rates              []Rate             `json:"rates,omitempty"`
+	Messages           []any              `json:"messages"`
 }
 
 type ListShipmentsResponse struct {
