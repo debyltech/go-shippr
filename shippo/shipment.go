@@ -84,9 +84,9 @@ func (c *Client) GetShipmentById(id string) (*Shipment, error) {
 	return &shipment, nil
 }
 
-func (c *Client) ListShipments() (*ListShipmentsResponse, error) {
+func (c *Client) ListShipments(query map[string]string) (*ListShipmentsResponse, error) {
 	var shipments ListShipmentsResponse
-	response, err := helper.Get(ShipmentsUri, BasicAuth, c.ApiKey, nil)
+	response, err := helper.Get(ShipmentsUri, BasicAuth, c.ApiKey, query)
 	if err != nil {
 		return nil, err
 	}
