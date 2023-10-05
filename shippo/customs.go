@@ -107,7 +107,7 @@ type CustomsDeclaration struct {
 	VatCollected           bool                   `json:"is_vat_collected,omitempty"`
 	B13aFilingOption       string                 `json:"b13a_filing_option,omitempty"`
 	B13aNumber             string                 `json:"b13a_number,omitempty"`
-	ExporterIdentification ExporterIdentification `json:"export_identification"`
+	ExporterIdentification ExporterIdentification `json:"exporter_identification"`
 	Metadata               string                 `json:"metadata"`
 }
 
